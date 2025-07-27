@@ -1,11 +1,12 @@
 #include <stdio.h>
+#include <math.h>
 
 #include "io/image.h"
 #include "math/vec.h"
 #include "math/ray.h"
 #include "graphics/color.h"
 
-u32 hit_sphere(const VEC4 center, f64 r, const RAY ray)
+f64 hit_sphere(const VEC4 center, f64 r, const RAY ray)
 {
     VEC4 oc = VEC4_sub(center, ray.origin); // o to c
     f64 a = VEC4_dot3(ray.dir, ray.dir);
@@ -13,16 +14,23 @@ u32 hit_sphere(const VEC4 center, f64 r, const RAY ray)
     f64 c = VEC4_dot3(oc, oc) - (r * r);
     f64 discriminant = (b * b) - (4 * a * c);
     
-    if (discriminant >= 0) return 1;
-    return 0;
+    if (discriminant < 0) return -1.0;
+    else return (-b - sqrt(discriminant)) / (2.0 * a);
 }
 
 COLOR ray_color(const RAY r)
 {
-    // VEC4_print(r.dir);
-    if (hit_sphere(VEC4_new(0, 0, -1, 0), 0.5, r))
+    VEC4 C = VEC4_new(0, 0, -1, 0);
+    f64 radius = 0.5;
+
+    f64 t = hit_sphere(C, radius, r);
+
+    if (t != -1.0)
     {
-        return COLOR_BLUE;
+        VEC4 P = RAY_at(r, t);
+        VEC4 n = VEC4_div(VEC4_sub(P, C), radius);
+        COLOR c = VEC4_div(VEC4_addc(n, 1.0), 2.0);
+        return c;
     }
 
     VEC4 u_dir = VEC4_normalize3(r.dir);

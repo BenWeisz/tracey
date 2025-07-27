@@ -57,6 +57,12 @@ VEC4 VEC4_div(const VEC4 v, const f64 c)
     return o;
 }
 
+VEC4 VEC4_addc(const VEC4 v, const f64 c)
+{
+    VEC4 o = { v.x + c, v.y + c, v.z + c, v.w + c };
+    return o;
+}
+
 f64 VEC4_norm3(const VEC4 v)
 {
     return sqrt(VEC4_dot3(v, v));
