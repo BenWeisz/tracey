@@ -1,4 +1,4 @@
-#include "image.h"
+#include "io/image.h"
 
 IMAGE* IMAGE_create(const u32 width, const u32 height)
 {
@@ -12,7 +12,7 @@ IMAGE* IMAGE_create(const u32 width, const u32 height)
     image->width = width;
     image->height = height;
     
-    image->buf = (f32*)malloc(sizeof(f32) * width * height * 3);
+    image->buf = (f64*)malloc(sizeof(f64) * width * height * 3);
     if (image->buf == NULL)
     {
         printf("ERROR: Failed to create buffer for image\n");
@@ -78,7 +78,7 @@ u32 IMAGE_write(const IMAGE* image, const char* path)
         {
             for (u32 c = 0; c < 3; c++)
             {
-                byte_buf[(((image->width * y) + x) * 3) + c] = (u8)(255.99 * image->buf[(((image->width * y) + x) * 3) + c]);
+                byte_buf[(((image->width * y) + x) * 3) + c] = (u8)(255.999999 * image->buf[(((image->width * y) + x) * 3) + c]);
             }
         }
     }
@@ -100,9 +100,9 @@ u32 IMAGE_write(const IMAGE* image, const char* path)
     return 1;
 }
 
-void IMAGE_set_pixel(IMAGE* image, const u32 x, const u32 y, const float r, const float g, const float b)
+void IMAGE_set_pixel(IMAGE* image, const u32 x, const u32 y, const COLOR c)
 {
-    image->buf[(((image->width * y) + x) * 3)]      = r;
-    image->buf[(((image->width * y) + x) * 3) + 1]  = g;
-    image->buf[(((image->width * y) + x) * 3) + 2]  = b;
+    image->buf[(((image->width * y) + x) * 3)]      = c.r;
+    image->buf[(((image->width * y) + x) * 3) + 1]  = c.g;
+    image->buf[(((image->width * y) + x) * 3) + 2]  = c.b;
 }

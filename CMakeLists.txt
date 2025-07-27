@@ -8,8 +8,11 @@ set(CMAKE_C_STANDARD 99)
 # set(CMAKE_C_FLAGS "-Wall")
 
 set(SOURCE_FILES main.c
-    src/image.c
-    src/io.c)
+    src/io/image.c
+    src/io/io.c
+    src/math/vec.c
+    src/math/ray.c
+    src/graphics/color.c)
 
 add_executable(${EXE_NAME} ${SOURCE_FILES})
 
