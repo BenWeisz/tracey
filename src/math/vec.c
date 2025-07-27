@@ -57,17 +57,17 @@ VEC4 VEC4_div(const VEC4 v, const f64 c)
     return o;
 }
 
-f64 VEC4_norm(const VEC4 v)
+f64 VEC4_norm3(const VEC4 v)
 {
-    return sqrt(VEC4_dot(v, v));
+    return sqrt(VEC4_dot3(v, v));
 }
 
-f64 VEC4_dot(const VEC4 v1, const VEC4 v2)
+f64 VEC4_dot3(const VEC4 v1, const VEC4 v2)
 {
-    return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z) + (v1.w * v2.w);
+    return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
 }
 
-VEC4 VEC4_cross(const VEC4 v1, const VEC4 v2)
+VEC4 VEC4_cross3(const VEC4 v1, const VEC4 v2)
 {
     VEC4 o;
     o.x = (v1.y * v2.z) - (v1.z * v2.y);
@@ -77,10 +77,17 @@ VEC4 VEC4_cross(const VEC4 v1, const VEC4 v2)
     return o;
 }
 
-VEC4 VEC4_normalize(const VEC4 v)
+VEC4 VEC4_normalize3(const VEC4 v)
 {
-    f64 norm = VEC4_norm(v);
+    u32 is_pos = 1;
+    if (v.w == 0.0) is_pos = 0;
+
+    f64 norm = VEC4_norm3(v);
     VEC4 o = VEC4_div(v, norm);
+    
+    if (is_pos) o.w = 1.0;
+    else o.w = 0.0;
+
     return o;
 }
 

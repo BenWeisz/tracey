@@ -32,12 +32,12 @@ VEC4 VEC4_add(const VEC4 v1, const VEC4 v2);
 VEC4 VEC4_mul(const VEC4 v, const f64 c);
 VEC4 VEC4_div(const VEC4 v, const f64 c);
 
-f64 VEC4_norm(const VEC4 v);
+f64 VEC4_norm3(const VEC4 v);
 
-f64 VEC4_dot(const VEC4 v1, const VEC4 v2);
-VEC4 VEC4_cross(const VEC4 v1, const VEC4 v2);
+f64 VEC4_dot3(const VEC4 v1, const VEC4 v2);
+VEC4 VEC4_cross3(const VEC4 v1, const VEC4 v2);
 
-VEC4 VEC4_normalize(const VEC4 v);
+VEC4 VEC4_normalize3(const VEC4 v);
 
 void VEC4_print(const VEC4 v);
 
