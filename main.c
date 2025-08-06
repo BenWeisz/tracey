@@ -3,19 +3,20 @@
 
 #include "io/image.h"
 #include "math/vec.h"
-#include "math/ray.h"
+#include "graphics/ray.h"
 #include "graphics/color.h"
+#include "graphics/shape.h"
 
 f64 hit_sphere(const VEC4 center, f64 r, const RAY ray)
 {
     VEC4 oc = VEC4_sub(center, ray.origin); // o to c
     f64 a = VEC4_dot3(ray.dir, ray.dir);
-    f64 b = -2.0 * VEC4_dot3(ray.dir, oc);
+    f64 h = VEC4_dot3(ray.dir, oc);
     f64 c = VEC4_dot3(oc, oc) - (r * r);
-    f64 discriminant = (b * b) - (4 * a * c);
+    f64 discriminant = (h * h) - (a * c);
     
     if (discriminant < 0) return -1.0;
-    else return (-b - sqrt(discriminant)) / (2.0 * a);
+    else return (h - sqrt(discriminant)) / a;
 }
 
 COLOR ray_color(const RAY r)
@@ -42,7 +43,7 @@ COLOR ray_color(const RAY r)
 int main()
 {
     const f32 aspect_ratio = 16.0 / 9.0;
-    const u32 image_width = 400;
+    const u32 image_width = 1000;
     const u32 image_height = image_width / aspect_ratio;
     IMAGE* image = IMAGE_create(image_width, image_height);
     
@@ -66,14 +67,12 @@ int main()
             VEC4_new(0.0, 0.0, -camera_focal_length, 0.0)),
         VEC4_add(VEC4_div(viewport_u, 2.0), VEC4_div(viewport_v, 2.0)));
     VEC4 viewport_p00 = VEC4_add(viewport_top_left, VEC4_div(VEC4_add(viewport_du, viewport_dv), 2.0));
-    
-    VEC4_print(camera_origin);
-    VEC4_print(viewport_top_left);
-    VEC4_print(viewport_p00);
+
+    SHAPE_list* shape_list = SHAPE_list_create();
 
     for (u32 j = 0; j < image_height; j++)
     {
-        // printf("Scanlines remaining: %u\n", (image_height - j));
+        printf("Scanlines remaining: %u\n", (image_height - j));
         for (u32 i = 0; i < image_width; i++)
         {
             RAY r;
@@ -85,12 +84,13 @@ int main()
             VEC4 viewport_pij = VEC4_add(viewport_p00, offset);
 
             r.dir = VEC4_sub(viewport_pij, camera_origin);
-            // VEC4_print(r.dir);
 
             COLOR c = ray_color(r);
             IMAGE_set_pixel(image, i, j, c);
         }
     }
+
+    SHAPE_list_destroy(shape_list);
 
     IMAGE_write(image, "./test.ppm");
     IMAGE_destroy(image);

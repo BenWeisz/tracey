@@ -27,7 +27,7 @@ typedef struct SHAPE_HIT
 
 SHAPE* SHAPE_create(const u32 type);
 void SHAPE_destroy(SHAPE* shape);
-bool SHAPE_hit(const SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit);
+u32 SHAPE_hit(const SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit);
 
 typedef struct SPHERE
 {
@@ -35,7 +35,7 @@ typedef struct SPHERE
     f64 r;
 } SPHERE;
 
-bool SPHERE_hit(const SPHERE* sphere, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit);
+u32 SPHERE_hit(const SPHERE* sphere, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit);
 
 GLIST_DECLARE(SHAPE, SHAPE_list)
 

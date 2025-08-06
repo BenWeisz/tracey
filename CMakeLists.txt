@@ -6,13 +6,15 @@ project(${EXE_NAME})
 
 set(CMAKE_C_STANDARD 99)
 # set(CMAKE_C_FLAGS "-Wall")
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -E")
 
 set(SOURCE_FILES main.c
     src/io/image.c
     src/io/io.c
     src/math/vec.c
-    src/math/ray.c
-    src/graphics/color.c)
+    src/graphics/ray.c
+    src/graphics/color.c
+    src/graphics/shape.c)
 
 add_executable(${EXE_NAME} ${SOURCE_FILES})
 

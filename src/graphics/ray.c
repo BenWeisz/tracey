@@ -1,4 +1,4 @@
-#include "math/ray.h"
+#include "graphics/ray.h"
 
 VEC4 RAY_at(RAY ray, const f64 t)
 {
