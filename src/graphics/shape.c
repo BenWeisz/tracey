@@ -2,37 +2,6 @@
 
 GLIST_DEFINE(SHAPE, SHAPE_list)
 
-SHAPE* SHAPE_create(const u32 type)
-{
-    SHAPE* shape = (SHAPE*)malloc(sizeof(SHAPE));
-    if (shape == NULL)
-    {
-        printf("ERROR: Failed to allocate memory for shape.\n");
-        return NULL;
-    }
-
-    shape->type = type;
-
-    if (type == SHAPE_TYPE_SPHERE)
-    {
-        shape->sphere.c = VEC4_zero();
-        shape->sphere.r = 0.0;
-    }
-    else
-    {
-        printf("ERROR: The form provided does not specify a valid shape.\n");
-        free(shape);
-        return NULL;
-    }
-
-    return shape;
-}
-
-void SHAPE_destroy(SHAPE* shape)
-{
-    free(shape);
-}
-
 u32 SHAPE_hit(const SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit)
 {
     if (shape->type == SHAPE_TYPE_SPHERE)
