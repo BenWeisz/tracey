@@ -12,21 +12,11 @@ SHAPE* SHAPE_create(const u32 type)
     }
 
     shape->type = type;
-    shape->form = NULL;
 
     if (type == SHAPE_TYPE_SPHERE)
     {
-        shape->form = malloc(sizeof(SPHERE));
-        if (shape->form == NULL)
-        {
-            printf("ERROR: Failed to allocate memory for the sphere.\n");
-            free(shape);
-            return NULL;
-        }
-
-        SPHERE* sphere = (SPHERE*)(shape->form);
-        sphere->c = VEC4_zero();
-        sphere->r = 0.0;
+        shape->sphere.c = VEC4_zero();
+        shape->sphere.r = 0.0;
     }
     else
     {
@@ -40,7 +30,6 @@ SHAPE* SHAPE_create(const u32 type)
 
 void SHAPE_destroy(SHAPE* shape)
 {
-    free(shape->form);
     free(shape);
 }
 
@@ -48,7 +37,7 @@ u32 SHAPE_hit(const SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_m
 {
     if (shape->type == SHAPE_TYPE_SPHERE)
     {
-        return SPHERE_hit((SPHERE*)(shape->form), ray, t_min, t_max, shape_hit);
+        return SPHERE_hit(&(shape->sphere), ray, t_min, t_max, shape_hit);
     }
 
     return 0;
