@@ -5,40 +5,7 @@
 #include "math/vec.h"
 #include "graphics/ray.h"
 #include "graphics/color.h"
-#include "graphics/shape.h"
-
-f64 hit_sphere(const VEC4 center, f64 r, const RAY ray)
-{
-    VEC4 oc = VEC4_sub(center, ray.origin); // o to c
-    f64 a = VEC4_dot3(ray.dir, ray.dir);
-    f64 h = VEC4_dot3(ray.dir, oc);
-    f64 c = VEC4_dot3(oc, oc) - (r * r);
-    f64 discriminant = (h * h) - (a * c);
-    
-    if (discriminant < 0) return -1.0;
-    else return (h - sqrt(discriminant)) / a;
-}
-
-COLOR ray_color(const RAY r)
-{
-    VEC4 C = VEC4_new(0, 0, -1, 0);
-    f64 radius = 0.5;
-
-    f64 t = hit_sphere(C, radius, r);
-
-    if (t != -1.0)
-    {
-        VEC4 P = RAY_at(r, t);
-        VEC4 n = VEC4_div(VEC4_sub(P, C), radius);
-        COLOR c = VEC4_div(VEC4_addc(n, 1.0), 2.0);
-        return c;
-    }
-
-    VEC4 u_dir = VEC4_normalize3(r.dir);
-    f64 a = 0.5 * (u_dir.y + 1.0);
-    COLOR c = VEC4_add(VEC4_mul(COLOR_WHITE, 1.0 - a), VEC4_mul(COLOR_new(0.5, 0.7, 1.0), a));
-    return c;
-}
+#include "graphics/scene.h"
 
 int main()
 {
@@ -68,11 +35,17 @@ int main()
         VEC4_add(VEC4_div(viewport_u, 2.0), VEC4_div(viewport_v, 2.0)));
     VEC4 viewport_p00 = VEC4_add(viewport_top_left, VEC4_div(VEC4_add(viewport_du, viewport_dv), 2.0));
 
-    SHAPE_list* shape_list = SHAPE_list_create();
+    SCENE* scene = SCENE_create();
+
+    SHAPE shape;
+    shape.type = SHAPE_TYPE_SPHERE;
+    shape.sphere.c = VEC4_new(0, 0, 1, 0);
+    shape.sphere.r = 0.5;
+    SHAPE_LIST_add(scene->shape_list, shape);
 
     for (u32 j = 0; j < image_height; j++)
     {
-        printf("Scanlines remaining: %u\n", (image_height - j));
+        // printf("Scanlines remaining: %u\n", (image_height - j));
         for (u32 i = 0; i < image_width; i++)
         {
             RAY r;
@@ -85,12 +58,16 @@ int main()
 
             r.dir = VEC4_sub(viewport_pij, camera_origin);
 
-            COLOR c = ray_color(r);
+            if (i == 500 && j == 238)
+            {
+                printf("jello\n");
+            }
+            COLOR c = SCENE_get_color_at(scene, &r);
             IMAGE_set_pixel(image, i, j, c);
         }
     }
 
-    SHAPE_list_destroy(shape_list);
+    SCENE_destroy(scene);
 
     IMAGE_write(image, "./test.ppm");
     IMAGE_destroy(image);

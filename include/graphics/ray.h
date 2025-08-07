@@ -4,6 +4,8 @@
 #include "math/vec.h"
 #include "types.h"
 
+#define RAY_MAX_T 1000000.0
+
 typedef struct RAY
 {
     VEC4 origin;

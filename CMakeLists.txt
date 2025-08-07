@@ -14,7 +14,8 @@ set(SOURCE_FILES main.c
     src/math/vec.c
     src/graphics/ray.c
     src/graphics/color.c
-    src/graphics/shape.c)
+    src/graphics/shape.c
+    src/graphics/scene.c)
 
 add_executable(${EXE_NAME} ${SOURCE_FILES})
 

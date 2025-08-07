@@ -1,9 +1,11 @@
 #include "graphics/shape.h"
 
-GLIST_DEFINE(SHAPE, SHAPE_list)
+GLIST_DEFINE(SHAPE, SHAPE_LIST)
 
-u32 SHAPE_hit(const SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit)
+u32 SHAPE_hit(SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit)
 {
+    shape_hit->shape = shape;
+
     if (shape->type == SHAPE_TYPE_SPHERE)
     {
         return SPHERE_hit(&(shape->sphere), ray, t_min, t_max, shape_hit);
