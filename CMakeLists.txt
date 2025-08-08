@@ -12,6 +12,7 @@ set(SOURCE_FILES main.c
     src/io/image.c
     src/io/io.c
     src/math/vec.c
+    src/math/interval.c
     src/graphics/ray.c
     src/graphics/color.c
     src/graphics/shape.c
