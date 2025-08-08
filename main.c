@@ -56,12 +56,8 @@ int main()
             VEC4 offset = VEC4_add(u_offset, v_offset);
             VEC4 viewport_pij = VEC4_add(viewport_p00, offset);
 
-            r.dir = VEC4_sub(viewport_pij, camera_origin);
+            r.dir = VEC4_normalize3(VEC4_sub(viewport_pij, camera_origin));
 
-            if (i == 500 && j == 238)
-            {
-                printf("jello\n");
-            }
             COLOR c = SCENE_get_color_at(scene, &r);
             IMAGE_set_pixel(image, i, j, c);
         }

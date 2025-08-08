@@ -6,9 +6,19 @@ u32 SHAPE_hit(SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SH
 {
     shape_hit->shape = shape;
 
+    u32 hit = 0;
     if (shape->type == SHAPE_TYPE_SPHERE)
     {
-        return SPHERE_hit(&(shape->sphere), ray, t_min, t_max, shape_hit);
+        hit = SPHERE_hit(&(shape->sphere), ray, t_min, t_max, shape_hit);
+    }
+
+    if (hit)
+    {
+        DEBUG_ASSERT_CLOSE(VEC4_norm3(ray->dir), 1.0);
+        shape_hit->front_face = VEC4_dot3(ray->dir, shape_hit->n) < 0;
+        shape_hit->n = shape_hit->front_face ? VEC4_neg(shape_hit->n) : shape_hit->n;
+
+        return 1;
     }
 
     return 0;
@@ -42,5 +52,6 @@ u32 SPHERE_hit(const SPHERE* sphere, const RAY* ray, const f64 t_min, const f64 
 
     shape_hit->p = RAY_at(*ray, shape_hit->t);
     shape_hit->n = VEC4_div(VEC4_sub(shape_hit->p, sphere->c), sphere->r);
+
     return 1;
 }

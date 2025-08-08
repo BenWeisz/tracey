@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "types.h"
+#include "debug_assert.h"
 #include "math/vec.h"
 #include "graphics/ray.h"
 #include "util/glist.h"
@@ -31,6 +32,7 @@ typedef struct SHAPE_HIT
     VEC4 p;
     VEC4 n;
     f64 t;
+    u32 front_face;
 } SHAPE_HIT;
 
 u32 SHAPE_hit(SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit);
