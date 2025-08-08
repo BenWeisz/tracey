@@ -16,7 +16,7 @@ u32 SHAPE_hit(SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SH
     {
         DEBUG_ASSERT_CLOSE(VEC4_norm3(ray->dir), 1.0);
         shape_hit->front_face = VEC4_dot3(ray->dir, shape_hit->n) < 0;
-        shape_hit->n = shape_hit->front_face ? VEC4_neg(shape_hit->n) : shape_hit->n;
+        shape_hit->n = shape_hit->front_face ? shape_hit->n : VEC4_neg(shape_hit->n);
 
         return 1;
     }

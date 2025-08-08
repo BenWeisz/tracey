@@ -42,6 +42,9 @@ int main()
     shape.sphere.c = VEC4_new(0, 0, -1, 0);
     shape.sphere.r = 0.5;
     SHAPE_LIST_add(scene->shape_list, shape);
+    shape.sphere.c = VEC4_new(0, -100.5, -1, 0);
+    shape.sphere.r = 100;
+    SHAPE_LIST_add(scene->shape_list, shape);
 
     for (u32 j = 0; j < image_height; j++)
     {
