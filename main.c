@@ -39,7 +39,7 @@ int main()
 
     SHAPE shape;
     shape.type = SHAPE_TYPE_SPHERE;
-    shape.sphere.c = VEC4_new(0, 0, 1, 0);
+    shape.sphere.c = VEC4_new(0, 0, -1, 0);
     shape.sphere.r = 0.5;
     SHAPE_LIST_add(scene->shape_list, shape);
 
