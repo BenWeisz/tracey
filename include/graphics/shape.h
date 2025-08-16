@@ -6,7 +6,10 @@
 
 #include "types.h"
 #include "debug_assert.h"
+
 #include "math/vec.h"
+#include "math/interval.h"
+
 #include "graphics/ray.h"
 #include "util/glist.h"
 
@@ -35,9 +38,9 @@ typedef struct SHAPE_HIT
     u32 front_face;
 } SHAPE_HIT;
 
-u32 SHAPE_hit(SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit);
+u32 SHAPE_hit(SHAPE* shape, const RAY* ray, const INTERVAL t_interval, SHAPE_HIT* shape_hit);
 
-u32 SPHERE_hit(const SPHERE* sphere, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit);
+u32 SPHERE_hit(const SPHERE* sphere, const RAY* ray, const INTERVAL t_interval, SHAPE_HIT* shape_hit);
 
 GLIST_DECLARE(SHAPE, SHAPE_LIST)
 

@@ -11,18 +11,12 @@ INTERVAL INTERVAL_new(f64 low, f64 high)
 
 INTERVAL INTERVAL_universe()
 {
-    INTERVAL interval;
-    interval.low = -INFINITY;
-    interval.high = INFINITY;
-    return interval;
+    return INTERVAL_new(-INFINITY, INFINITY);
 }
 
 INTERVAL INTERVAL_empty()
 {
-    INTERVAL interval;
-    interval.low = INFINITY;
-    interval.high = -INFINITY;
-    return interval;
+    return INTERVAL_new(INFINITY, -INFINITY);
 }
 
 f64 INTERVAL_size(INTERVAL interval)

@@ -2,14 +2,14 @@
 
 GLIST_DEFINE(SHAPE, SHAPE_LIST)
 
-u32 SHAPE_hit(SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit)
+u32 SHAPE_hit(SHAPE* shape, const RAY* ray, const INTERVAL t_interval, SHAPE_HIT* shape_hit)
 {
     shape_hit->shape = shape;
 
     u32 hit = 0;
     if (shape->type == SHAPE_TYPE_SPHERE)
     {
-        hit = SPHERE_hit(&(shape->sphere), ray, t_min, t_max, shape_hit);
+        hit = SPHERE_hit(&(shape->sphere), ray, t_interval, shape_hit);
     }
 
     if (hit)
@@ -24,7 +24,7 @@ u32 SHAPE_hit(SHAPE* shape, const RAY* ray, const f64 t_min, const f64 t_max, SH
     return 0;
 }
 
-u32 SPHERE_hit(const SPHERE* sphere, const RAY* ray, const f64 t_min, const f64 t_max, SHAPE_HIT* shape_hit)
+u32 SPHERE_hit(const SPHERE* sphere, const RAY* ray, const INTERVAL t_interval, SHAPE_HIT* shape_hit)
 {
     if (sphere->r <= 1e-6)
     {
@@ -43,10 +43,10 @@ u32 SPHERE_hit(const SPHERE* sphere, const RAY* ray, const f64 t_min, const f64 
     f64 sqrtd = sqrt(discriminant);
     shape_hit->t = (h - sqrtd) / a;
 
-    if (shape_hit->t < t_min || shape_hit->t > t_max)
+    if (!INTERVAL_surrounds(t_interval, shape_hit->t))
     {
         shape_hit->t = (h + sqrtd) / a;
-        if (shape_hit->t < t_min || shape_hit->t > t_max)
+        if (!INTERVAL_surrounds(t_interval, shape_hit->t))
             return 0;
     }
 

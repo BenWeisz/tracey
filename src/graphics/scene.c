@@ -29,7 +29,7 @@ void SCENE_destroy(SCENE* scene)
     }
 }
 
-COLOR SCENE_get_color_at(const SCENE* scene, const RAY* ray)
+COLOR SCENE_hit(const SCENE* scene, const RAY* ray)
 {
     SHAPE_LIST_ITERATOR iterator = SHAPE_LIST_iterator(scene->shape_list);
     SHAPE* shape = SHAPE_LIST_next(&iterator);
@@ -39,9 +39,9 @@ COLOR SCENE_get_color_at(const SCENE* scene, const RAY* ray)
     closest_hit.t = RAY_MAX_T;
     while (shape != NULL)
     {
-        // TODO: Change the bounds later
         SHAPE_HIT shape_hit;
-        u32 hit = SHAPE_hit(shape, ray, 0, RAY_MAX_T, &shape_hit);
+        INTERVAL t_interval = INTERVAL_new(0, closest_hit.t);
+        u32 hit = SHAPE_hit(shape, ray, t_interval, &shape_hit);
         if (hit && shape_hit.t < closest_hit.t)
         {
             closest_hit = shape_hit;

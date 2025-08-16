@@ -61,7 +61,7 @@ int main()
 
             r.dir = VEC4_normalize3(VEC4_sub(viewport_pij, camera_origin));
 
-            COLOR c = SCENE_get_color_at(scene, &r);
+            COLOR c = SCENE_hit(scene, &r);
             IMAGE_set_pixel(image, i, j, c);
         }
     }
