@@ -61,3 +61,8 @@ COLOR SCENE_hit(const SCENE* scene, const RAY* ray)
     COLOR c = VEC4_add(VEC4_mul(COLOR_WHITE, 1.0 - a), VEC4_mul(COLOR_new(0.5, 0.7, 1.0), a));
     return c;
 }
+
+u32 SCENE_render(const SCENE* scene, const IMAGE* image, const CAMERA* camera)
+{
+    return 0;
+}

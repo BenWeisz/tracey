@@ -11,6 +11,9 @@
 #include "graphics/shape.h"
 #include "graphics/color.h"
 #include "graphics/ray.h"
+#include "graphics/camera.h"
+
+#include "io/image.h"
 
 typedef struct SCENE
 {
@@ -21,5 +24,6 @@ SCENE* SCENE_create();
 void SCENE_destroy(SCENE* scene);
 
 COLOR SCENE_hit(const SCENE* scene, const RAY* ray);
+u32 SCENE_render(const SCENE* scene, const IMAGE* image, const CAMERA* camera);
 
 #endif // SCENE_H
