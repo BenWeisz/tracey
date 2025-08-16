@@ -17,55 +17,38 @@ int main()
     const f32 viewport_height = 2.0;
     const f32 viewport_width = viewport_height * (image_width + 0.0) / image_height;
 
-    VEC4 camera_origin = VEC4_zero();
-    camera_origin.w = 1.0;
+    VEC4 camera_eye = VEC4_zero();
+    camera_eye.w = 1.0;
 
-    f32 camera_focal_length = 1.0;
-
-    VEC4 viewport_u = { viewport_width, 0.0, 0.0, 0.0 };
-    VEC4 viewport_v = { 0.0, -viewport_height, 0.0, 0.0 };
-
-    VEC4 viewport_du = VEC4_div(viewport_u, image_width);
-    VEC4 viewport_dv = VEC4_div(viewport_v, image_height);
-
-    VEC4 viewport_top_left = VEC4_sub(
-        VEC4_add(
-            camera_origin, 
-            VEC4_new(0.0, 0.0, -camera_focal_length, 0.0)),
-        VEC4_add(VEC4_div(viewport_u, 2.0), VEC4_div(viewport_v, 2.0)));
-    VEC4 viewport_p00 = VEC4_add(viewport_top_left, VEC4_div(VEC4_add(viewport_du, viewport_dv), 2.0));
+    VEC4 camera_lookat = VEC4_zero();
+    camera_lookat.z = -1.0;
+    camera_lookat.w = 1.0;
+    const f32 camera_f = 1.0;
+    CAMERA camera = CAMERA_new(camera_eye, camera_lookat, camera_f, viewport_width, viewport_height, image_width, image_height);
 
     SCENE* scene = SCENE_create();
-
     SHAPE shape;
     shape.type = SHAPE_TYPE_SPHERE;
-    shape.sphere.c = VEC4_new(0, 0, -1, 0);
+    shape.sphere.c = VEC4_new(0, 0, -2, 0);
     shape.sphere.r = 0.5;
     SHAPE_LIST_add(scene->shape_list, shape);
     shape.sphere.c = VEC4_new(0, -100.5, -1, 0);
     shape.sphere.r = 100;
     SHAPE_LIST_add(scene->shape_list, shape);
 
-    for (u32 j = 0; j < image_height; j++)
+    RAY_LIST* ray_list = CAMERA_get_rays(&camera);
+    RAY_LIST_ITERATOR ray_list_iterator = RAY_LIST_iterator(ray_list);
+    for (u32 r_i = 0; r_i < ray_list->size; r_i++)
     {
-        // printf("Scanlines remaining: %u\n", (image_height - j));
-        for (u32 i = 0; i < image_width; i++)
-        {
-            RAY r;
-            r.origin = camera_origin;
-            
-            VEC4 u_offset = VEC4_mul(viewport_du, i);
-            VEC4 v_offset = VEC4_mul(viewport_dv, j);
-            VEC4 offset = VEC4_add(u_offset, v_offset);
-            VEC4 viewport_pij = VEC4_add(viewport_p00, offset);
+        RAY* r = RAY_LIST_next(&ray_list_iterator);
+        COLOR c = SCENE_hit(scene, r);
 
-            r.dir = VEC4_normalize3(VEC4_sub(viewport_pij, camera_origin));
-
-            COLOR c = SCENE_hit(scene, &r);
-            IMAGE_set_pixel(image, i, j, c);
-        }
+        const u32 j = r_i / image_width;
+        const u32 i = r_i % image_width;
+        IMAGE_set_pixel(image, i, j, c);
     }
-
+    RAY_LIST_destroy(ray_list);
+    
     SCENE_destroy(scene);
 
     IMAGE_write(image, "./test.ppm");
